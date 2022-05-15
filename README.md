@@ -1,6 +1,7 @@
 # webpack 项目搭建关键点
 
 ### 项目基本使用命令
+- 构建开发环境：`yarn build:dev`
 - 构建生产环境：`yarn build`
 
 ### 项目初始化
@@ -56,3 +57,27 @@ yarn add [package] --optional
   ]
 }
 ```
+
+### [webpack-merge 插件](https://www.npmjs.com/package/webpack-merge)
+- 作用：配置文件拆分之后，进行配置合并
+- 使用场景：将不同环境的配置文件分离之后，需要将基础配置和相对应的环境配置进行合拼时
+- 安装：`yarn add webpack-merge --dev`
+- 基本用法
+  + 把webpack.config.js文件的配置进行拆分，分为webpack.base.config.js(基础文件配置)、webpack.dev.config.js(开发环境配置)、webpack.prod.config.js(正式环境配置)，放到build文件夹行统一管理
+  + 在packge.json中配置script命令，使用 --config [配置路径] 的方式引入不同的配置。例：
+  ```
+  // packge.json
+  "build": "webpack --config ./build/webpack.prod.config.js"
+  ```
+  + 配置文件中通过 webpack-merge 合并不同的配置文件。例：
+  ```
+  // webpack.prod.config.js
+  const commonConfig = require("./webpack.base.config");
+  const { merge } = require("webpack-merge");
+
+  const prodConfig = {
+    mode: "production",
+  };
+
+  module.exports = merge(commonConfig, prodConfig);
+  ```
