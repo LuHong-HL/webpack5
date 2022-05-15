@@ -42,7 +42,7 @@ yarn add [package] --peer
 yarn add [package] --optional
 ```
 
-### [HtmlWebpackPlugin 插件](https://github.com/jantimon/html-webpack-plugin#options)
+### [HtmlWebpackPlugin](https://github.com/jantimon/html-webpack-plugin#options)
 - 作用：生成一个 HTML5 文件， 在 body 中使用 script 标签引入你所有 webpack 生成的 bundle
 - 安装：`yarn add html-webpack-plugin --dev`
 - 基本用法
@@ -58,7 +58,7 @@ yarn add [package] --optional
 }
 ```
 
-### [webpack-merge 插件](https://www.npmjs.com/package/webpack-merge)
+### [webpack-merge](https://www.npmjs.com/package/webpack-merge)
 - 作用：配置文件拆分之后，进行配置合并
 - 使用场景：将不同环境的配置文件分离之后，需要将基础配置和相对应的环境配置进行合拼时
 - 安装：`yarn add webpack-merge --dev`
@@ -81,3 +81,25 @@ yarn add [package] --optional
 
   module.exports = merge(commonConfig, prodConfig);
   ```
+
+### [webpack-dev-server](https://www.npmjs.com/package/webpack-dev-server)
+- 作用：提供了一个基本的 web server，并且具有 live reloading(实时重新加载) 功能
+- 使用场景：实时重新加载，代理接口地址处理跨域问题
+- 安装：`yarn add webpack-dev-server --dev`
+- 基础使用 [基础配置api](https://webpack.docschina.org/configuration/dev-server/)
+```
+// webpack.dev.config.js
+const devConfig = {
+  devServer: {
+    // port: 8080,  // 端口号设置
+    static: path.resolve(__dirname, '../dist'), // 告诉服务器从哪里提供静态内容
+    // proxy: { // 代理 url 到 服务端同域地址，正式开发项目会用到
+    //   '/api': { // 匹配的 url
+    //     target: 'http://localhost:3000', // 代理的地址
+    //     pathRewrite: { '^/api': '' }, // 重写url
+    //   },
+    // },
+  },
+};
+```
+
