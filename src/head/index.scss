@@ -1,0 +1,10 @@
+:root {
+    --main-bg-color: #000;
+  }
+
+body {
+    .scss {
+        background-color: var(--main-bg-color);
+        transform: translateX(40px);
+    }
+}

@@ -103,3 +103,104 @@ const devConfig = {
 };
 ```
 
+### 样式问题处理
+- 基本配置
+  + style-loader: 将css 插入dom中
+  + css-loader: css-loader 会对 @import 和 url() 进行处理，就像 js 解析 import/require() 一样
+  + 此方式是通过 stlye 的方式引入样式的
+  ```
+  module: {
+    rules: [ // 从下到上，从right 到 left
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
+      },
+    ],
+  },
+  ```
+
+- css 抽离
+  + mini-css-extract-plugin: 将 CSS 提取到单独的文件中，为每个包含 CSS 的 JS 文件创建一个 CSS 文件
+  + 此方式使用 link 的方式引入样式
+  + 基础配置
+  ```
+  // webpack.base.config.js
+  const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+  {
+    module: {
+      rules: [
+        {
+          test: /\.css$/i,
+          use: [MiniCssExtractPlugin.loader, 'css-loader'],
+        }
+      ],
+    },
+    plugins: [
+      new MiniCssExtractPlugin()
+    ],
+  };
+  ```
+
+- 样式预处理配置（scss）
+  + sass-loader: 样式预处理，加载 Sass/SCSS 文件并将他们编译为 CSS
+  + sass
+  + dart-sass
+  ```
+  module: {
+    rules: [
+      {
+        test: /\.s[ac]ss$/i,
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+      },
+    ],
+  },
+  ```
+  
+  - 通过 postcss 兼容最新的css语法
+   + [postcss](https://github.com/postcss/postcss): 通过 js plugins 转换样式的工具
+   + [postcss-loader](https://github.com/webpack-contrib/postcss-loader): 配合postcss使用的处理css的loader 
+   + [postcss-preset-env](https://github.com/csstools/postcss-preset-env): 允许开发者使用最新的 CSS 语法而不用担心浏览器兼容性
+   + [autoprefixer](https://github.com/postcss/autoprefixer): 使用Can I Use中的值向CSS规则添加供应商前缀,postcss-preset-env 集成了 autoprefixer
+   + [browserslist](https://github.com/browserslist/browserslist#browserslistrc): 配置目标环境
+   + 安装：`yarn add postcss-loader postcss postcss-preset-env --dev`
+   + 基础配置:
+     - postcss-loader的使用配置  
+     ```
+     // webpack.base.config.js
+     // 在 css-loader之前使用
+     module: {
+      rules: [
+        // 从下到上，从right 到 left
+        {
+          test: /\.css$/i,
+          use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
+        },
+        {
+          test: /\.s[ac]ss$/i,
+          use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'],
+        },
+      ],
+     }
+     ```
+     - postcss的配置  
+     ```
+     // 新建 postcss.config.js 配置文件
+     module.exports = {
+      plugins: [
+        [
+          "postcss-preset-env",
+          {
+            // options 选项
+            // stage: 2 // 默认是 2 工作草案阶段
+          },
+        ],
+      ],
+     };
+     ```
+     - 目标环境的配置
+     ```
+     // 创建 .browserslistrc 配置文件  
+     last 2 versions  
+     \> 1%  
+     not ie <= 8  
+     ```
