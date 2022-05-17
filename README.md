@@ -204,3 +204,50 @@ const devConfig = {
      \> 1%  
      not ie <= 8  
      ```
+### 图片资源处理
+- webpack5之前处理loader
+  + raw-loader: 将文件导入为字符串
+  + url-loader: 将文件作为 data URI 内联到 bundle 中
+  + file-loader: 将文件发送到输出目录
+  ```
+  module: {
+    rules: [
+      {
+        test: /\.(png|jpg|gif)$/,
+        use: {
+          loader: 'url-loader',
+          options: {
+            limit: 1024,
+            outputPath: '/img/'
+          }
+        }
+      }
+    ]
+  }
+  ```
+- webpack5的资源模块类型(asset module type)，通过添加 4 种新的模块类型，来替换所有这些 loader
+  + asset/resource 发送一个单独的文件并导出 URL。之前通过使用 file-loader 实现。
+  + asset/inline 导出一个资源的 data URI。之前通过使用 url-loader 实现。
+  + asset/source 导出资源的源代码。之前通过使用 raw-loader 实现。
+  + asset 在导出一个 data URI 和发送一个单独的文件之间自动选择。之前通过使用 url-loader，并且配置资源体积限制实现。
+  + 基础配置
+  ```
+  // webpack.base.config.js
+  module: {
+    rules: [
+      {
+        test: /\.(png|jpg|gif)$/,
+        type: 'asset', // 在导出一个 data URI 和发送一个单独的文件之间自动选择
+        parser: {
+            dataUrlCondition: { // 模块大小小于 maxsize，则会被作为一个 Base64 编码的字符串注入到包中，有利于减少http请求
+                maxSize: 11 * 1024 // byte
+            }
+        },
+        generator: {
+            filename: 'imgs/[name]_[contenthash:8][ext]' // 输出的文件名称
+        }
+      }
+    ]
+  }
+  ```
+  

@@ -21,12 +21,24 @@ module.exports = {
         test: /\.s[ac]ss$/i,
         use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'],
       },
+      {
+        test: /\.(png|jpg|gif)$/,
+        type: 'asset', // 在导出一个 data URI 和发送一个单独的文件之间自动选择
+        parser: {
+            dataUrlCondition: { // 模块大小小于 maxsize，则会被作为一个 Base64 编码的字符串注入到包中，有利于减少http请求
+                maxSize: 11 * 1024 // 单位 byte
+            }
+        },
+        generator: {
+            filename: 'imgs/[name]_[contenthash:8][ext]' // 输出的文件名称
+        }
+      }
     ],
   },
   plugins: [
     // 插件配置
     new HtmlWebpackPlugin({
-      // 生成一个 HTML5 文件， 在 body 中使用 script 标签引入你所有 webpack 生成的 bundle
+      // Generate an HTML5 file with a script tag in the body to include all your webpack-generated bundles
       template: "./index.html", // 使用html的模板路径
     }),
     new MiniCssExtractPlugin()
