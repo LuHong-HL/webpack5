@@ -1,3 +1,5 @@
+import './babelTest/index' // babel test
+
 import { Head } from './head'
 import { AddImg } from './imgTest'
 document.body.appendChild(new Head()) // 在body元素上添加样式测试例子

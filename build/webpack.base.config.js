@@ -1,6 +1,7 @@
 const path = require("path"); // 引入node的 path 模块
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+// const { ModuleFederationPlugin } = require('webpack').container; // 模块联邦
 
 module.exports = {
   entry: "./src/index.js", // webpack 入口，可多个入口，出口只能一个
@@ -32,6 +33,11 @@ module.exports = {
         generator: {
             filename: 'imgs/[name]_[contenthash:8][ext]' // 输出的文件名称
         }
+      },
+      {
+          test: /\.js$/,
+          use: ['babel-loader'],
+          exclude: /node_modules/ // 排除转化的文件夹
       }
     ],
   },
@@ -41,6 +47,18 @@ module.exports = {
       // Generate an HTML5 file with a script tag in the body to include all your webpack-generated bundles
       template: "./index.html", // 使用html的模板路径
     }),
-    new MiniCssExtractPlugin()
+    new MiniCssExtractPlugin(),
+    // new ModuleFederationPlugin({ // 模块联邦
+    //     name: "componentApp",
+    //     filename: "remoteEntry.js",
+    //     library: {
+    //         type: 'var',
+    //         name: 'componentApp'
+    //     },
+    //     exposes: {
+    //         './Head': './src/head/index.js',
+    //         './ImgTest': './src/imgTest/index.js'
+    //     }
+    // })
   ],
 };

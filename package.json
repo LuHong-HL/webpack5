@@ -9,6 +9,10 @@
     "build": "webpack --config ./build/webpack.prod.config.js"
   },
   "devDependencies": {
+    "@babel/core": "^7.17.12",
+    "@babel/plugin-transform-runtime": "^7.18.0",
+    "@babel/preset-env": "^7.17.12",
+    "babel-loader": "^8.2.5",
     "css-loader": "^6.7.1",
     "dart-sass": "^1.25.0",
     "html-webpack-plugin": "^5.5.0",
@@ -23,5 +27,8 @@
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.9.0",
     "webpack-merge": "^5.8.0"
+  },
+  "dependencies": {
+    "@babel/runtime-corejs3": "^7.18.0"
   }
 }
