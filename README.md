@@ -306,3 +306,46 @@ const devConfig = {
     },
     ```  
     
+- [Module Federation 模块联邦](https://webpack.docschina.org/concepts/module-federation/)
+  + 作用：多个独立的构建可以组成一个应用程序，这些独立的构建之间不应该存在依赖关系，因此可以单独开发和部署它们。
+  + 底层概念：我们区分本地模块和远程模块。本地模块即为普通模块，是当前构建的一部分。远程模块不属于当前构建，并在运行时从所谓的容器加载。
+  + 注意点：使用的时候，导入的模块是异步的。例：
+  ```
+  import('xxx').then(res => {
+    console.log(res)
+  })
+  ```
+  + 远程模块配置（容器、暴露）：
+  ```
+  // webpack.config.js
+  plugins: [
+    // 插件配置
+    new ModuleFederationPlugin({
+      // 模块联邦 暴露配置
+      name: "componentApp", // 暴露的入口名称
+      filename: "remoteEntry.js", // 暴露的文件名称
+      exposes: { // 暴露的模块
+        "./Head": "./src/head/index.js",
+        "./ImgTest": "./src/imgTest/index.js",
+        "./BabelTest": "./src/babelTest/index.js",
+      },
+    }),
+  ],
+  ```  
+  + 本地模块配置 (使用)
+  ```
+  // webpack.config.js
+  plugins: [
+    new ModuleFederationPlugin({ // 使用配置
+      remotes: {
+        componentApp: "componentApp@http://localhost:8080/remoteEntry.js",
+      },
+    }),
+  ],
+  ```
+  ```
+  // 使用的文件 引入对应的模块
+  语法：import('[入口名称]/[模块key]')
+  例：import('componentApp/Head')
+  ```  
+

@@ -3,7 +3,7 @@
 //     return await Promise.resolve(true)
 //   }
 
-const fn = () => {
+export const fn = () => {
     Promise.resolve('fn1').then(res => {
         console.log(res)
     })
@@ -11,7 +11,7 @@ const fn = () => {
 
 fn()
 
-const fn2 = async () => {
+export const fn2 = async () => {
     return await Promise.resolve('fn2')
 }
 

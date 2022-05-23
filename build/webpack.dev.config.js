@@ -14,6 +14,9 @@ const devConfig = {
     //     pathRewrite: { '^/api': '' }, // 重写url
     //   },
     // },
+    headers: {
+      "Access-Control-Allow-Origin": "*" // 允许的源
+    }
   },
 };
 
